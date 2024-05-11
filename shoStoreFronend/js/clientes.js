@@ -2,6 +2,34 @@ document.addEventListener('DOMContentLoaded', function () {
     loadData();
   
   });
+
+  fetch('http://localhost:9000/shoeStore/v1/api/enum/tipo-identificacion')
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Error al enviar los datos');
+      }
+      return response.json();
+  })
+  .then(data => {
+      const TypeId = data;
+      
+      const selectElement = document.getElementById('selectElement');
+  
+      selectElement.innerHTML = '';
+  
+      // Iterar sobre los datos recibidos y crear las opciones del select2
+      TypeId.forEach(TypeId => {
+          const option = document.createElement('option');
+          option.value = TypeId; 
+          option.text = TypeId; 
+          selectElement.appendChild(option);
+      });
+  })
+  .catch(error => {
+      console.error('Error al enviar los datos:', error);
+  });
+
+
 function loadData(){
     
 
@@ -47,6 +75,33 @@ function loadData(){
 document.getElementById("clienteForm").addEventListener("submit", function(event){
     event.preventDefault();
   });
+
+fetch('http://localhost:9000/service-security/v1/api/enum/tipo-id')
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Error al enviar los datos');
+    }
+    return response.json();
+})
+.then(data => {
+    const TypeId = data;
+    
+    const selectElement = document.getElementById('selectElement');
+
+    selectElement.innerHTML = '';
+
+    // Iterar sobre los datos recibidos y crear las opciones del select2
+    TypeId.forEach(TypeId => {
+        const option = document.createElement('option');
+        option.value = TypeId; 
+        option.text = TypeId; 
+        selectElement.appendChild(option);
+    });
+})
+.catch(error => {
+    console.error('Error al enviar los datos:', error);
+});
+
 
 function save(){
 

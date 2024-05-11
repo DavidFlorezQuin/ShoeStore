@@ -1,7 +1,7 @@
 package com.shoeStore.shoeStore.Entity;
 
-import Utils.Estado;
-import Utils.TipoIdentificacion;
+import com.shoeStore.shoeStore.Utils.Estado;
+import com.shoeStore.shoeStore.Utils.TipoIdentificacion;
 import jakarta.persistence.*;
 
 @Entity

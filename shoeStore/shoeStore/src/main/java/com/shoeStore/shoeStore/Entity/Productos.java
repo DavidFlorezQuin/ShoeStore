@@ -1,6 +1,6 @@
 package com.shoeStore.shoeStore.Entity;
 
-import Utils.Estado;
+import com.shoeStore.shoeStore.Utils.Estado;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
