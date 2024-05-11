@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 public class Ventas{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 36)
-    private char idVenta;
+    private Long idVenta;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name="cliente_id_cliente", nullable = true)
@@ -27,7 +28,13 @@ public class Ventas{
     @Column(name="fecha_venta", nullable = true)
     private LocalDateTime fechaVenta;
 
+    public Long getIdVenta() {
+        return idVenta;
+    }
 
+    public void setIdVenta(Long idVenta) {
+        this.idVenta = idVenta;
+    }
 
     public Clientes getCliente() {
         return cliente;

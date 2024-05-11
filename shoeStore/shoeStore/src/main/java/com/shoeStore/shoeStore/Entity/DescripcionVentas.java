@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 @Table(name = "descripcion_ventas")
 public class DescripcionVentas {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id_descripcion_venta", length = 36)
-    private char idDescripcionVenta;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name="ventas_id_venta", nullable = true)
@@ -31,12 +33,12 @@ public class DescripcionVentas {
     @Column(name="sub_total", precision = 9, scale = 2,  nullable = true)
     private BigDecimal subTotal;
 
-    public char getIdDescripcionVenta() {
-        return idDescripcionVenta;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdDescripcionVenta(char idDescripcionVenta) {
-        this.idDescripcionVenta = idDescripcionVenta;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Ventas getVenta() {

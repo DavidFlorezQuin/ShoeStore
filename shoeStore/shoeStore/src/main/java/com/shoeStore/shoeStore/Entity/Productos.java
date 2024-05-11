@@ -9,8 +9,9 @@ import java.math.BigDecimal;
 @Table(name = "productos")
 public class Productos {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 36)
-    private char idProducto;
+    private Long idProducto;
 
     @Column(name="nombre_producto", nullable = true)
     private String nombreProducto;
@@ -33,11 +34,12 @@ public class Productos {
     @Column(name="estado")
     private Estado estado;
 
-    public char getIdProducto() {
+
+    public Long getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(char idProducto) {
+    public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
     }
 

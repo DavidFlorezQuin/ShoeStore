@@ -23,23 +23,6 @@ public class ClientesService extends ABaseService<Clientes> implements IClientes
     }
 
     @Override
-    public Clientes save(Clientes entity) throws Exception{
-        try {
-             UUID uuid = UUID.randomUUID();
-
-            char[] uuidChars = uuid.toString().toCharArray();
-
-            entity.setIdCliente(uuidChars);
-
-            return repository.save(entity);
-            }catch (Exception e) {
-                throw new Exception("Error al guardar el cliente", e);
-             }
-
-    }
-
-
-    @Override
     public List<ClientesDto> getClientesFiltros(String nombre, String ciudad, String estado) {
         return repository.getClientesFiltro(nombre, ciudad, estado);
     }

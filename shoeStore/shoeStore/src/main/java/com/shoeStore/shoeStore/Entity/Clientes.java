@@ -9,8 +9,9 @@ import jakarta.persistence.*;
 public class Clientes{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente", length = 36)
-    private char[] idCliente;
+    private Long idCliente;
 
     @Enumerated(EnumType.STRING)
     @Column(name="tipo_identificacion", nullable = true)
@@ -38,11 +39,12 @@ public class Clientes{
     @Column(name="estado")
     private Estado estado;
 
-    public char[] getIdCliente() {
+
+    public Long getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(char[] idCliente) {
+    public void setIdCliente(Long idCliente) {
         this.idCliente = idCliente;
     }
 
