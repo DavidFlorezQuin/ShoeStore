@@ -1,10 +1,13 @@
 package com.shoeStore.shoeStore.Controller;
 
+import com.shoeStore.shoeStore.Dto.ApiResponseDto;
+import com.shoeStore.shoeStore.Dto.ClientesDto;
 import com.shoeStore.shoeStore.Entity.Clientes;
 import com.shoeStore.shoeStore.IService.IClientesService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -18,4 +21,19 @@ public class ClienteController extends ABaseController<Clientes, IClientesServic
     protected ClienteController(IClientesService service) {
         super(service, "clientes");
     }
+
+    @GetMapping("/filtros")
+    public ResponseEntity<ApiResponseDto<List<ClientesDto>>> show(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String ciudad,
+            @RequestParam(required = false) String estado
+    ) {
+        try {
+            List<ClientesDto> entity = service.getClientesFiltros(nombre, ciudad, estado);
+            return ResponseEntity.ok(new ApiResponseDto<>("Registro encontrado", entity, true));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new ApiResponseDto<>(e.getMessage(), null, false));
+        }
+    }
+
 }
