@@ -41,8 +41,7 @@ function loadData(){
             <img src="../utils/icons/pencil-square.svg" alt="" onclick="findById(`+ item.id + `)"></th>
             </button>
             </th>
-                        <th><img src="../utils/icons/trash3.svg" alt="" onclick="deleteById(`+ item.id + `)"></th>
-            <th><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../../assets/icons/search.svg" alt="" onclick="detailsProduct(`+ item.id + `)"></a></th>
+            <th><img src="../utils/icons/trash3.svg" alt="" onclick="delete(`+ item.id + `)"></th>
         </tr>`;
         });
 
@@ -111,7 +110,7 @@ function clearFilter(){
 
 
 function findById(id) {
-    fetch('http://localhost:9000/shoeStore/v1/api/clientes' + id, {
+    fetch('http://localhost:9000/shoeStore/v1/api/clientes/' + id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -124,21 +123,29 @@ function findById(id) {
       return response.json();
     })
       .then(data => {
+
+        var iframe = document.getElementById('miIframe');
+
   
         const datos = data.data; 
   
-        document.getElementById("tipoIdentificacion").value = datos.tipoIdentificacion;
-        document.getElementById("identificacion").value = datos.identificacion;
-        document.getElementById("nombre").value = datos.nombreCliente;
-        document.getElementById("apellido").value = datos.apellidoCliente;
-        document.getElementById("telefono").value = datos.telefono;
-        document.getElementById("direccion").value = datos.direccion;
-        document.getElementById("ciudad").value = datos.ciudad;
-        document.getElementById("estado").value = datos.estado;
+        var datosInput = {
+            tipoIdentificacion: datos.tipoIdentificacion,
+            identificacion: datos.identificacion,
+            nombre: datos.nombreCliente,
+            apellido: datos.apellidoCliente,
+            telefono: datos.telefono,
+            direccion: datos.direccion,
+            ciudad: datos.ciudad,
+            estado: datos.estado
+        }
+
+        iframe.contentWindow.postMessage(datosInput, '*');
+
   
-        var btnAgregar = document.querySelector('button[name="btnAgregar"]');
-        btnAgregar.textContent = 'Actualizar'; // Para cambiar el texto del botón
-        btnAgregar.setAttribute('onclick', 'update()'); // Para cambiar el atributo onclick
+        var btnAgregar = document.querySelector('.btnAgregar');
+        btnAgregar.textContent = 'Actualizar';
+        btnAgregar.setAttribute('onclick', 'update()');
         
       })
       .catch(error => {

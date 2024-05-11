@@ -103,8 +103,8 @@ public abstract class ABaseService<T> implements IBaseService<T> {
             throw new Exception("Registro no encontrado");
         }
 
-        T entityUpdate = op.get();
+        T entityToDelete = op.get();
 
-        getRepository().save(entityUpdate);
+        getRepository().delete(entityToDelete);
     }
 }

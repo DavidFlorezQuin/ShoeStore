@@ -1,3 +1,44 @@
+document.addEventListener('DOMContentLoaded', function () {
+    EnumEstado();
+  });
+
+
+document.getElementById("productoForm").addEventListener("submit", function(event){
+    event.preventDefault();
+  });
+
+  function EnumEstado(){
+
+    
+    fetch('http://localhost:9000/shoeStore/v1/api/enum/estado')
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error al enviar los datos');
+        }
+        return response.json();
+    })
+  .then(data => {
+      const TypeId = data;
+      
+      const selectElement = document.getElementById('estado');
+  
+      selectElement.innerHTML = '';
+      
+      // Iterar sobre los datos recibidos y crear las opciones del select2
+      TypeId.forEach(TypeId => {
+          const option = document.createElement('option');
+          option.value = TypeId; 
+          option.text = TypeId; 
+          selectElement.appendChild(option);
+      });
+  })
+  .catch(error => {
+      console.error('Error al enviar los datos:', error);
+  });
+
+}
+    
+    // FUNCION PARA GUARDAR
 
     function save() {
         var nombre = document.getElementById("nombre").value;
@@ -10,16 +51,14 @@
 
         // Construye el objeto con los datos del producto
         var productoData = {
-            nombre: nombre,
+            nombreProducto: nombre,
             descripcion: descripcion,
             cantidad: cantidad,
             precio: precio,
-            iva: iva,
-            descuento: descuento,
+            porcentajeIva: iva,
+            porcentajeDescuento: descuento,
             estado: estado
         };
-
-        // Realiza la solicitud fetch para enviar los datos a un endpoint
         fetch('http://localhost:9000/shoeStore/v1/api/productos', {
             method: 'POST',
             headers: {
@@ -34,12 +73,10 @@
                     title: "Oops...",
                     text: "Something went wrong!",
                   });  
-                throw new Error('Error al enviar los datos');
             }
             return response.json();
         })
         .then(data => {
-            // Maneja la respuesta del servidor
             Swal.fire({
                 icon: "success",
                 title: "Correto !",
@@ -47,8 +84,215 @@
               }); 
         })
         .catch(error => {
-            // Maneja cualquier error que ocurra durante la solicitud fetch
             console.error('Error al enviar los datos:', error);
             alert('Error al enviar los datos. Por favor, inténtalo de nuevo.');
         });
     }
+
+
+// FUNCION PARA BUSCAR
+
+function findById(id){
+    
+    fetch('http://localhost:9000/shoeStore/v1/api/productos/' + id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+      .then(data => {
+  
+        const datos = data.data; 
+  
+        document.getElementById("id").value = datos.idProducto;
+        document.getElementById("nombre").value = datos.nombreProducto;
+        document.getElementById("descripcion").value = datos.descripcion;
+        document.getElementById("cantidad").value = datos.cantidad;
+        document.getElementById("precio").value = datos.precio;
+        document.getElementById("iva").value = datos.porcentajeIva;
+        document.getElementById("descuento").value = datos.porcentajeDescuento;
+        document.getElementById("descuento").value = datos.estado;
+
+
+      })
+      .catch(error => {
+        console.error('Error en la solicitud:', error);
+      });
+}
+
+    // LISTA DE ESTADO
+
+    function loadData(){
+
+        fetch('http://localhost:9000/shoeStore/v1/api/productos',{
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response)=>{
+            if(!response.ok){
+                throw new Error();
+            }
+            return response.json();
+        })
+        .then((data)=>{
+            var html = '';
+        
+            const product = data.data
+        
+            product.forEach((item) => {
+                html += `<tr>
+                <td>`+ item.idProducto + `</td>
+                <td>`+ item.nombreProducto + `</td>
+                <td>`+ item.cantidad + `</td>
+                <td>`+ item.precio + `</td>
+                <td>`+ item.porcentajeIva + `</td>
+                <td>`+ item.porcentajeDescuento + `</td>
+                <td>`+ item.estado + `</td>
+                <th>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">
+                <img src="../utils/icons/pencil-square.svg" alt="" onclick="findById(`+ item.idProducto + `)">
+                </button>
+                </th>
+                <th><img src="../utils/icons/trash3.svg" alt="" onclick="deleteById(`+ item.idProducto + `)"></th>
+            
+                </tr>`;
+            });
+        
+            document.getElementById('resultData').innerHTML = html;
+        
+        })
+        
+        }
+
+        function findById(id) {
+            fetch('http://localhost:9000/shoeStore/v1/api/productos/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var iframe = document.getElementById('miIframe');
+                const datos = data.data;
+        
+                // Enviar los datos al iframe como un mensaje
+                iframe.contentWindow.postMessage(datos, '*');
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+        }
+        
+        window.addEventListener('message', function(event) {
+            // Verificar el origen del mensaje si es necesario
+        
+            // Obtener los datos enviados desde el archivo principal
+            var datos = event.data;
+        
+            document.getElementById("id").value = datos.idProducto;
+            document.getElementById("nombre").value = datos.nombreProducto;
+            document.getElementById("descripcion").value = datos.descripcion;
+            document.getElementById("cantidad").value = datos.cantidad;
+            document.getElementById("precio").value = datos.precio;
+            document.getElementById("iva").value = datos.porcentajeIva;
+            document.getElementById("descuento").value = datos.porcentajeDescuento;
+            document.getElementById("estado").value = datos.estado;
+
+            var btnAgregar = document.querySelector('.btnAgregar');
+            btnAgregar.textContent = 'Actualizar';
+            btnAgregar.setAttribute('onclick', 'update()');
+            
+        });
+        
+        
+function update(id){
+
+    var data = {
+        idProducto: document.getElementById("id").value, 
+        nombreProducto: document.getElementById("nombre").value,
+        descripcion: document.getElementById("descripcion").value,
+        cantidad: document.getElementById("cantidad").value,
+        precio: document.getElementById("precio").value,
+        porcentajeIva: document.getElementById("iva").value,
+        porcentajeDescuento: document.getElementById("descuento").value,
+        estado: document.getElementById("estado").value
+    }
+
+
+    var id = document.getElementById("id").value;
+    var jsonData = JSON.stringify(data);
+
+
+    fetch("http://localhost:9000/shoeStore/v1/api/productos/"+id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Fallido !",
+                text: "Ocurrió un error!",
+              });    
+                   }
+          return response.json();
+        })
+        .then((result) => {
+            Swal.fire({
+                icon: "success",
+                title: "Existoso !",
+                text: "Se ha actualizado con exito!",
+
+            });            
+            loadData();
+          loadData();
+        })
+        .catch((error) => {
+          console.error("Error al actualizar el registro:", error);
+        });
+    }
+
+    function deleteById(id) {
+        fetch('http://localhost:9000/shoeStore/v1/api/productos/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            Swal.fire({
+                icon: "error",
+                title: "exitoso !",
+                text: "Se eliminó con exito!",
+              });    
+              
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+        });
+    }
+    
