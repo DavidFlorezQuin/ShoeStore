@@ -4,6 +4,7 @@ import com.shoeStore.shoeStore.IService.IBaseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +63,7 @@ public abstract class ABaseService<T> implements IBaseService<T> {
         try {
             return getRepository().save(entity);
         } catch (Exception e) {
-            // Captura la excepción
+
             throw new Exception("Error al guardar la entidad: " + e.getMessage());
         }
     }

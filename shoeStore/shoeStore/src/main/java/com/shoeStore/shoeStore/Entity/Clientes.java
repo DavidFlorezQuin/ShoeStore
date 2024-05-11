@@ -4,15 +4,13 @@ import Utils.Estado;
 import Utils.TipoIdentificacion;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "clientes")
 public class Clientes{
 
     @Id
     @Column(name = "id_cliente", length = 36)
-    private char idCliente;
+    private char[] idCliente;
 
     @Enumerated(EnumType.STRING)
     @Column(name="tipo_identificacion", nullable = true)
@@ -40,11 +38,11 @@ public class Clientes{
     @Column(name="estado")
     private Estado estado;
 
-    public char getIdCliente() {
+    public char[] getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(char idCliente) {
+    public void setIdCliente(char[] idCliente) {
         this.idCliente = idCliente;
     }
 
