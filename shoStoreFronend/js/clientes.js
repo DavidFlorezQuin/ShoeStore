@@ -195,8 +195,6 @@ function update(id){
                 title: "Existoso !",
                 text: "Se ha actualizado con exito!",
               });            
-          loadData();
-          clearData();
         })
         .catch((error) => {
           console.error("Error al actualizar el registro:", error);

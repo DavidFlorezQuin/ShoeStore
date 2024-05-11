@@ -38,10 +38,15 @@ function loadData(){
             <td>`+ item.estado  + `</td>
             <th>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="findById(`+ item.idCliente + `)">
-            <img src="../utils/icons/pencil-square.svg" alt="" onclick="findById(`+ item.id + `)"></th>
+            <img src="../utils/icons/pencil-square.svg" alt=""></th>
             </button>
             </th>
-            <th><img src="../utils/icons/trash3.svg" alt="" onclick="delete(`+ item.id + `)"></th>
+
+            <th>
+            <button class="btn btn-danger onclick="deleteById(`+ item.idCliente + `)">
+                <img src="../utils/icons/trash3.svg" alt="" ">
+            </button>
+            </th>
         </tr>`;
         });
 
@@ -50,6 +55,7 @@ function loadData(){
     })
 
 }
+
 function loadFilter() {
     // Obtener los valores de los filtros
     var nombre = document.getElementById('filtroNombre').value;
@@ -89,8 +95,11 @@ function loadFilter() {
             <td>`+ item.direccion + `</td>
             <td>`+ item.estado + `</td>
             <th><img src="../utils/icons/pencil-square.svg" alt="" onclick="findById(`+ item.id_cliente + `)"></th>
-            <th><img src="../utils/icons/trash3.svg" alt="" onclick="deleteById(`+ item.id_cliente + `)"></th>
-            <th><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../../assets/icons/search.svg" alt="" onclick="detailsProduct(`+ item.id + `)"></a></th>
+            <th>
+            <button class="btn btn-danger">
+           <img src="../utils/icons/trash3.svg" alt="" onclick="deleteById(`+ item.id_cliente + `)">
+            </button>
+            </th>
         </tr>`;
         });
 
@@ -153,3 +162,45 @@ function findById(id) {
         console.error('Error en la solicitud:', error);
       });
   }
+
+  
+  function deleteById(id) {
+    Swal.fire({
+        title: "Está seguro que desea eliminar?",
+        text: "No podrás recuperar la información!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, hazlo!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('http://localhost:9000/shoeStore/v1/api/clientes/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire({
+                    title: "Eliminado!",
+                    text: "Tu archivo se eliminó con éxito.",
+                    icon: "success"
+                });
+
+                loadData();
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+        }
+    });  
+}
+
+

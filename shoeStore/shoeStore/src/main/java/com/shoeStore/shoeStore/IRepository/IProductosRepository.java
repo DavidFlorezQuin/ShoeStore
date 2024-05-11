@@ -1,6 +1,7 @@
 package com.shoeStore.shoeStore.IRepository;
 
 import com.shoeStore.shoeStore.Dto.ClientesDto;
+import com.shoeStore.shoeStore.Dto.ProductosDto;
 import com.shoeStore.shoeStore.Entity.Productos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,13 +18,13 @@ public interface IProductosRepository extends JpaRepository<Productos, Long> {
                     + " nombre_producto AS nombreProducto,"
                     + " descripcion, "
                     + " estado,"
+                    + " precio,"
                     + " porcentaje_descuento AS descuento,"
                     + " cantidad,"
-                    + " porcentaje_iva AS iva, "
-                    + " identificacion "
+                    + " porcentaje_iva AS iva "
                     + " FROM "
                     + " productos "
-                    + " WHERE (:nombre IS NULL OR nombre_cliente LIKE CONCAT('%', :nombre, '%')) "
+                    + " WHERE (:nombre IS NULL OR nombre_producto LIKE CONCAT('%', :nombre, '%')) "
                     + " AND (:estado IS NULL OR estado = :estado)", nativeQuery = true)
-    List<ClientesDto> getClientesFiltro(String nombre, String ciudad, String estado);
+    List<ProductosDto> getProductosFiltro(String nombre, String estado);
 }
