@@ -17,4 +17,9 @@ public class DescripcionVentasService extends ABaseService<DescripcionVentas> im
     protected JpaRepository<DescripcionVentas, Long> getRepository() {
         return repository;
     }
+
+    @Override
+    public void update(Long id, DescripcionVentas entity) throws Exception {
+
+    }
 }

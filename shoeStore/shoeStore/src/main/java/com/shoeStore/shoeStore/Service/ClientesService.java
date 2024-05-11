@@ -38,6 +38,7 @@ public class ClientesService extends ABaseService<Clientes> implements IClientes
 
     }
 
+
     @Override
     public List<ClientesDto> getClientesFiltros(String nombre, String ciudad, String estado) {
         return repository.getClientesFiltro(nombre, ciudad, estado);
