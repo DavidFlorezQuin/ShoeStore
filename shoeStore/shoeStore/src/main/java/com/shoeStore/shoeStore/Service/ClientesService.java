@@ -29,12 +29,10 @@ public class ClientesService extends ABaseService<Clientes> implements IClientes
 
             entity.setIdCliente(uuidChars);
 
-
-            return entity;
-        }catch (Exception e) {
-            // Manejo de excepciones
-            throw new Exception("Error al guardar el cliente", e);
-        }
+            return repository.save(entity);
+            }catch (Exception e) {
+                throw new Exception("Error al guardar el cliente", e);
+             }
 
     }
 }

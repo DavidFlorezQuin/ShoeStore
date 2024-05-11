@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-    loadData();
-  
+    EnumTipoDato();
+    EnumEstado();
   });
 
+  function EnumTipoDato(){
+  
   fetch('http://localhost:9000/shoeStore/v1/api/enum/tipo-identificacion')
   .then(response => {
       if (!response.ok) {
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
   .then(data => {
       const TypeId = data;
       
-      const selectElement = document.getElementById('selectElement');
+      const selectElement = document.getElementById('tipoIdentificacion');
   
       selectElement.innerHTML = '';
   
@@ -28,84 +30,49 @@ document.addEventListener('DOMContentLoaded', function () {
   .catch(error => {
       console.error('Error al enviar los datos:', error);
   });
+}
 
+function EnumEstado(){
 
-function loadData(){
     
-
-    fetch('http://localhost:9000/shoeStore/v1/api/clientes',{
-        method: 'GET',
-        headers:{
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((response)=>{
-        if(!response.ok){
-            throw new Error();
+    fetch('http://localhost:9000/shoeStore/v1/api/enum/estado')
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error al enviar los datos');
         }
         return response.json();
     })
-    .then((data)=>{
-        var html = '';
+  .then(data => {
+      const TypeId = data;
+      
+      const selectElement = document.getElementById('estado');
+  
+      selectElement.innerHTML = '';
+      
+      // Iterar sobre los datos recibidos y crear las opciones del select2
+      TypeId.forEach(TypeId => {
+          const option = document.createElement('option');
+          option.value = TypeId; 
+          option.text = TypeId; 
+          selectElement.appendChild(option);
+      });
+  })
+  .catch(error => {
+      console.error('Error al enviar los datos:', error);
+  });
 
-        const client = data.data
-
-        client.forEach((item) => {
-            html += `<tr>
-            <td>`+ item.idCliente + `</td>
-            <td>`+ item.tipoIdentificacion + `</td>
-            <td>`+ item.nombreCliente + `</td>
-            <td>`+ item.apellidoCliente + `</td>
-            <td>`+ item.telefono + `</td>
-            <td>`+ item.direccion + `</td>
-            <td>`+ item.ciudad + `</td>
-            <td>`+ (item.estado == true ? 'Activo' : 'Inactivo') + `</td>
-            <th><img src="../utils/icons/pencil-square.svg" alt="" onclick="findById(`+ item.id + `)"></th>
-            <th><img src="../utils/icons/trash3.svg" alt="" onclick="deleteById(`+ item.id + `)"></th>
-            <th><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../../assets/icons/search.svg" alt="" onclick="detailsProduct(`+ item.id + `)"></a></th>
-        </tr>`;
-        });
-
-        document.getElementById('resultData').innerHTML = html;
-
-    })
 }
+  
 
 
 document.getElementById("clienteForm").addEventListener("submit", function(event){
     event.preventDefault();
   });
 
-fetch('http://localhost:9000/service-security/v1/api/enum/tipo-id')
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Error al enviar los datos');
-    }
-    return response.json();
-})
-.then(data => {
-    const TypeId = data;
-    
-    const selectElement = document.getElementById('selectElement');
 
-    selectElement.innerHTML = '';
-
-    // Iterar sobre los datos recibidos y crear las opciones del select2
-    TypeId.forEach(TypeId => {
-        const option = document.createElement('option');
-        option.value = TypeId; 
-        option.text = TypeId; 
-        selectElement.appendChild(option);
-    });
-})
-.catch(error => {
-    console.error('Error al enviar los datos:', error);
-});
 
 
 function save(){
-
-
     var tipoIdentificacion = document.getElementById("tipoIdentificacion").value;
     var identificacion = document.getElementById("identificacion").value;
     var nombre = document.getElementById("nombre").value;
@@ -119,8 +86,8 @@ function save(){
     var clienteData = {
         tipoIdentificacion: tipoIdentificacion,
         identificacion: identificacion,
-        nombre: nombre,
-        apellido: apellido,
+        nombreCliente: nombre,
+        apellidoCliente: apellido,
         telefono: telefono,
         direccion: direccion,
         ciudad: ciudad,
@@ -145,13 +112,27 @@ function save(){
         return response.json();
     })
     .then(data => {
-        // Maneja la respuesta del servidor
-        console.log('Datos enviados correctamente:', data);
-        alert('Datos enviados correctamente');
+        Swal.fire({
+            icon: "success",
+            title: "Correto !",
+            text: "Datos enviados exitosamente!",
+          }); 
+
+          cleanData();
     })
     .catch(error => {
-        // Maneja cualquier error que ocurra durante la solicitud fetch
         console.error('Error al enviar los datos:', error);
         alert('Error al enviar los datos. Por favor, inténtalo de nuevo.');
     });
+}
+
+function cleanData(){
+document.getElementById("identificacion").value = "";
+document.getElementById("nombre").value = "";
+document.getElementById("apellido").value = "";
+document.getElementById("telefono").value = "";
+document.getElementById("direccion").value = "";
+document.getElementById("ciudad").value = "";
+document.getElementById("estado").value = "";
+
 }

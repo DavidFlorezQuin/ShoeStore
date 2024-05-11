@@ -89,8 +89,11 @@
         })
         .then(data => {
             // Maneja la respuesta del servidor
-            console.log('Datos enviados correctamente:', data);
-            alert('Datos enviados correctamente');
+            Swal.fire({
+                icon: "success",
+                title: "Correto !",
+                text: "Datos enviados exitosamente!",
+              }); 
         })
         .catch(error => {
             // Maneja cualquier error que ocurra durante la solicitud fetch
